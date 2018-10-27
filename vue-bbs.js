@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 const multer = require('multer')
 const svgCaptcha = require('svg-captcha');
 const nodemailer = require('nodemailer');
+const http = require('http')
 const https = require('https')
 const fs = require('fs')
 const dbPromise = sqlite.open('./bbs.db', { Promise });
@@ -22,15 +23,6 @@ let sessions = {}
 // 设置默认模板文件
 // app.set('views', './views')
 
-
-// 重定向 http 到 https
-app.use((req, res, next) => {
-  res.writeHead(301, {
-      Location: `https://${req.headers.host}${req.url}`
-  })
-  res.end()
-  // next()
-})
 
 // 默认打开 static 下的 index.html
 // 相对 http://localhost/static 
@@ -400,13 +392,6 @@ app.route('/api/add-post')
     res.send({user: req.user})
   })
 
-// 启动监听，读取数据库
-;(async function() {
-  db = await dbPromise
-  app.listen(port, () => {
-    console.log('server is listening on port', port)
-  })
-}())
 
 // 增加 https 访问
 https.createServer({
@@ -416,3 +401,10 @@ https.createServer({
   .listen(port2, () => {
   console.log('server listening on port', port2)
 })
+
+http.createServer((req, res) => {
+  res.writeHead(301, {
+      Location: `https://${req.headers.host}${req.url}`
+  })
+  res.end()
+}).listen(port, () => console.log('server listening on port', port))
