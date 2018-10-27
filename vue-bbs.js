@@ -207,7 +207,7 @@ app.get('/api/captcha', (req, res, next) => {
   let captcha = svgCaptcha.create({
     color: true,
     noise: 2,
-    ignoreChars: '0o1i',
+    ignoreChars: '0oO1lLiI',
     // background: '#cc9966'
   });
   sessions[req.cookies.sessionId] = captcha.text.toLowerCase()
