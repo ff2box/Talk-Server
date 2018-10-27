@@ -12,6 +12,7 @@ const fs = require('fs')
 const dbPromise = sqlite.open('./bbs.db', { Promise });
 const upload = multer({dest: path.join(__dirname, 'user-uploaded')})
 const port = 80
+const port2 = 443
 const app = express()
 let db
 let sessions = {}
@@ -413,5 +414,5 @@ https.createServer({
   cert: fs.readFileSync('/root/.acme.sh/bbs.iceeweb.com/bbs.iceeweb.com.cer')
 }, app)
   .listen(port2, () => {
-  console.log('server listening on port', port2
+  console.log('server listening on port', port2)
 })
