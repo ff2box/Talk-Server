@@ -9,7 +9,7 @@ const svgCaptcha = require('svg-captcha');
 const nodemailer = require('nodemailer');
 const dbPromise = sqlite.open('./bbs.db', { Promise });
 const upload = multer({dest: path.join(__dirname, 'user-uploaded')})
-const port = 3002
+const port = 80
 const app = express()
 let db
 let sessions = {}
@@ -21,7 +21,8 @@ app.locals.pretty = true
 
 // 默认打开 static 下的 index.html
 // 相对 http://localhost/static 
-app.use('/static', express.static('./static'))
+// app.use('/static', express.static('./static'))
+app.use(express.static(path.join(__dirname, './static')))
 app.use('/api/avatars', express.static('./user-uploaded'))
 app.use(cookieParser('sdfghyhbvbnm'))
 app.use(bodyParser.urlencoded())
@@ -78,7 +79,7 @@ app.get('/api/post/:postid', async (req, res, next)=> {
       where userId = users.id`
       , postid)
 
-    console.log('访问Post: ',post.id)
+    // console.log('访问Post: ',post.id)
     // res.render('post.pug',{post,comments, user: req.user})
     res.jsonp({status: 200, data: {post, comments, user: req.user}})
   } else {
@@ -140,8 +141,8 @@ app.route('/api/register')
     res.jsonp({status: 200, data: {user: req.user}})
   })
   .post(upload.single('avatar'), async (req, res, next) => {
-    console.log(req.file)
-    console.log(req.body)
+    // console.log(req.file)
+    console.log(req.body, 'req.file:' + req.file != undefined)
 
     let isExistUser = await db.get( 
       'SELECT id FROM users WHERE username = ?', req.body.username )
@@ -242,7 +243,7 @@ app.route('/api/add-post')
       res.send({post: post})
     } else {
       // res.render('page-404.pug', {data :'请先登录后再发帖，谢谢 ^_^ '})
-      res.jsonp({status: 200, data: {message :'请先登录后再发帖，谢谢 ^_^ '}})
+      res.status(403).send({message :'请先登录后再发帖，谢谢 ^_^ '})
     }
   })
 
@@ -256,7 +257,7 @@ app.route('/api/add-post')
       res.send({message: '删除成功'})
     } else {
       // res.render('page-404.pug', {data :'您不能删除别人的帖子哦，发个帖子试试吧 ^_^ '})
-      res.jsonp({status: 403, data: {message :'您不能删除别人的帖子哦，发个帖子试试吧 ^_^ '}})
+      res.status(403).send({message :'您不能删除别人的帖子哦，发个帖子试试吧 ^_^ '})
     }
   })
 
@@ -270,7 +271,7 @@ app.route('/api/add-post')
       res.send({message: '删除成功'})
     } else {
       // res.render('page-404.pug', {data :'您不能删除别人的评论哦，发个评论试试吧 ^_^ '})
-      res.jsonp({status: 403, data: {message :'您不能删除别人的评论哦，发个评论试试吧 ^_^ '}})
+      res.status(403).send({message :'您不能删除别人的评论哦，发个评论试试吧 ^_^ '})
     }
   })
   
@@ -345,9 +346,10 @@ app.route('/api/add-post')
         res.send({message: '邮件发送成功，记得回邮箱确认信息 @_@'})
       } else {
         // res.render('page-404.pug', {data: '用户名或邮箱错误'})
-        res.send({message: '用户名或邮箱错误'})
+        res.status(403).send({message: '用户名或邮箱错误'})
       }
     })
+
   // 重置密码
   app.route('/api/reset-password/?:hash')
     .get((req, res, next) => {
@@ -379,6 +381,11 @@ app.route('/api/add-post')
         res.jsonp({status: 403, data: {data: '密码修改失败，请确认用户名是输入否正确 ~~'}})
       }
     })
+
+  // 判断登录状态
+  app.get('/api/isLogin', (req, res, next) => {
+    res.send({user: req.user})
+  })
 
 // 启动监听，读取数据库
 ;(async function() {
