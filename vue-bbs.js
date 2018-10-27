@@ -29,7 +29,7 @@ app.use((req, res, next) => {
       Location: `https://${req.headers.host}${req.url}`
   })
   res.end()
-  next()
+  // next()
 })
 
 // 默认打开 static 下的 index.html
