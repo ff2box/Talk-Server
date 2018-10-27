@@ -394,17 +394,22 @@ app.route('/api/add-post')
 
 
 // 增加 https 访问
-https.createServer({
+let httpsServer = https.createServer({
   key: fs.readFileSync('/root/.acme.sh/bbs.iceeweb.com/bbs.iceeweb.com.key'),
   cert: fs.readFileSync('/root/.acme.sh/bbs.iceeweb.com/bbs.iceeweb.com.cer')
-}, app)
-  .listen(port2, () => {
-  console.log('server listening on port', port2)
-})
+  }, app)
 
-http.createServer((req, res) => {
+let httpServer = http.createServer((req, res) => {
   res.writeHead(301, {
       Location: `https://${req.headers.host}${req.url}`
   })
   res.end()
-}).listen(port, () => console.log('server listening on port', port))
+})
+
+
+ // 启动监听，读取数据库
+ ;(async function() {
+   db = await dbPromise
+   httpsServer.listen(port2, () => console.log('server is listening on port', port2))
+   httpServer.listen(port, () => console.log('server is listening on port', port))
+ }())
