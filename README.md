@@ -24,8 +24,7 @@
 ### Uses
 - 后端： `node.js`
 - 数据库： `SQL` 
-- 前端： [Vue](https://github.com/ices1/VUE-BBS)
-- 前后端分离
+- 前端： `Vue`
 
 ### Feature  
  - 正常登录，注册，发帖，回复等功能
