@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser')
 const multer = require('multer')
 const svgCaptcha = require('svg-captcha');
 const nodemailer = require('nodemailer');
+const https = require('https')
+const fs = require('fs')
 const dbPromise = sqlite.open('./bbs.db', { Promise });
 const upload = multer({dest: path.join(__dirname, 'user-uploaded')})
 const port = 80
@@ -15,9 +17,19 @@ let db
 let sessions = {}
 
 // 美化 html 源代码
-app.locals.pretty = true 
+// app.locals.pretty = true
 // 设置默认模板文件
 // app.set('views', './views')
+
+
+// 重定向 http 到 https
+app.use((req, res, next) => {
+  res.writeHead(301, {
+      Location: `https://${req.headers.host}${req.url}`
+  })
+  res.end()
+  next()
+})
 
 // 默认打开 static 下的 index.html
 // 相对 http://localhost/static 
@@ -394,3 +406,12 @@ app.route('/api/add-post')
     console.log('server is listening on port', port)
   })
 }())
+
+// 增加 https 访问
+https.createServer({
+  key: fs.readFileSync('/root/.acme.sh/bbs.iceeweb.com/bbs.iceeweb.com.key'),
+  cert: fs.readFileSync('/root/.acme.sh/bbs.iceeweb.com/bbs.iceeweb.com.cer')
+}, app)
+  .listen(port2, () => {
+  console.log('server listening on port', port2
+})
