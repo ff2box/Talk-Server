@@ -12,8 +12,8 @@ const https = require('https')
 const fs = require('fs')
 const dbPromise = sqlite.open('./bbs.db', { Promise });
 const upload = multer({dest: path.join(__dirname, 'user-uploaded')})
-const port = 80
-const port2 = 443
+const port = 1001
+const port2 = 1002
 const app = express()
 let db
 let sessions = {}
