@@ -1,7 +1,9 @@
-# BBS-Server
+# Talk-Server
 
 ### demo[https://talk.iceeweb.com/](https://talk.iceeweb.com/)
 
+> 该仓库为博客，Node实现后端部分，前端部分访问: https://github.com/ices1/Talk
+> 
 ![Home](https://raw.githubusercontent.com/ices1/BBS-Server/master/imgForReadme/talk.png)
 
 ### Install 
