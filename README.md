@@ -1,5 +1,9 @@
 # BBS-Server
 
+### demo[https://talk.iceeweb.com/](https://talk.iceeweb.com/)
+
+![Home](https://raw.githubusercontent.com/ices1/BBS-Server/master/imgForReadme/talk.png)
+
 ### Install 
 ```javascript
     npm i
@@ -18,7 +22,7 @@
  - 前后端分离
     - 后端: [Node](https://github.com/ices1/BBS--Server)
     - 前端
-        1. [React](https://github.com/ices1/React-BBS)
+        1. ~~[React](https://github.com/ices1/React-BBS)~~
         2. [Vue](https://github.com/ices1/VUE-BBS)
 
 ### Uses
@@ -27,13 +31,9 @@
 - 前端： `Vue`
 
 ### Feature  
- - 正常登录，注册，发帖，回复等功能
+ - 正常登录，注册，发帖,删帖，回复等功能
  - 动态验证码登录
  - 邮件找回密码
 
 
-
-<!-- #### [在线访问地址](http://vps.iceeweb.com:3002/) -->
-
-<!-- #### [源码地址](http://vps.iceeweb.com:3002/) -->
 
